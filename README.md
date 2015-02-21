@@ -10,7 +10,7 @@ If you check the content of the index.html file the first I do is to make sure I
 
 The only element I have on my HTML is a Div with the ID "mapCanvas". The final thing in the file is this script
 
-```
+```javascript
   <script type="text/javascript" charset="utf-8">
     $(function() {
       $("#mapCanvas").geolocate("30 N Racine Chicago");
@@ -34,7 +34,8 @@ This Sample has a list of Places in the seeds file. So make sure to migrate the 
 
 If you check the Gemfile I'm using the **Geocoder** gem. With this gem I can add the columns latitude and longitude on my model Place (check the migrations) and add the following lines into my Place class:
 
-```
+
+```ruby
 class Place < ActiveRecord::Base
   geocoded_by :address
   after_validation :geocode
@@ -46,14 +47,14 @@ Now if you visit the index.html.erb of places you can see a little bit of Javasc
 
 Understanding the Javascript code line by line:
 
-```
+```javascript
   window.DataSet = <%= @places.to_json.html_safe %>;
 ```
 
 In this line I'm creating a DataSet variable and using erb tags to tranform my @places variable I created in my PlacesController into a json object. That way I can use the json in my Javascript code.
 
 
-```
+```javascript
   window.onload = function() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function (position) {
@@ -63,7 +64,7 @@ In this line I'm creating a DataSet variable and using erb tags to tranform my @
 I'm waiting for the page to load and after that I check if the browser has support for geolocation. I'm gonna use the browser geolocation to center the map based when the user is.
 
 
-```
+```javascript
   var currentPosition = new google.maps.LatLng(
     position.coords.latitude,
     position.coords.longitude
@@ -72,7 +73,7 @@ I'm waiting for the page to load and after that I check if the browser has suppo
 
 In the code above I grab the users current position and I create a Google LatLng object with this.
 
-```
+```javascript
   var map = new google.maps.Map(document.getElementById('map'), {
     center: currentPosition,
     zoom: 15,
@@ -82,7 +83,7 @@ In the code above I grab the users current position and I create a Google LatLng
 
 Now I create a map variable that has a Google Maps object and set the center to be users' current position, I adjust the zoom and I set the style of the map. Now the final thing I need is to plot all the places:
 
-```
+```javascript
   for (var i = 0; i < window.DataSet.length; i++) {
     var place = window.DataSet[i];
     var position = new google.maps.LatLng(place.latitude, place.longitude);
