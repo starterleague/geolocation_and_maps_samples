@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <p>Click the button to get your coordinates.</p>
+
+    <p>
+      There's security restriction in place in Chrome for using geolocation from a file:/// URI, though unfortunately it show any errors to indicate that. To test this example, open your terminal, and inside of this folder type:</p>
+
+    <p><code>python -m SimpleHTTPServer</code></p>
+
+    <p>
+      In your browser navigate to: <a href="http://localhost:8000/index.html">http://localhost:8000/index.html</a>.
+    </p>
+
+    <button onclick="getLocation()">Geolocate me now!</button>
+
+    <p id="demo"></p>
+
+    <script>
+      var x = document.getElementById("demo");
+
+      function getLocation() {
+        if (navigator.geolocation) {
+          location = navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+          x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+      }
+
+      function showPosition(position) {
+        x.innerHTML = "Latitude: " + position.coords.latitude +
+        "<br>Longitude: " + position.coords.longitude;
+      }
+    </script>
+
+  </body>
+</html>
